@@ -1,0 +1,14 @@
+{
+  "name": "express-pleroma-authenticator",
+  "version": "1.0.0",
+  "description": "Pluggable oauth2",
+  "main": "index.js",
+  "repository": "https://git.ihatebeinga.live/floatingghost/express-pleroma-authenticator",
+  "author": "FloatingGhost",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "url-join": "^4.0.1"
+  }
+}
