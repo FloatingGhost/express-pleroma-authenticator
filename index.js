@@ -38,9 +38,9 @@ class PleromaAuthenticator {
     }
 
     async checkCredentials(token) {
-        const resp = await fetch(urljoin(this.baseUrl, '/api/v1/accounts/verify_credentials', {
+        const resp = await fetch(urljoin(this.baseUrl, '/api/v1/accounts/verify_credentials'), {
             headers: { 'Authorization': token }
-        }));
+        });
         return await resp.json();
     }
 }
