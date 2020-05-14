@@ -36,6 +36,13 @@ class PleromaAuthenticator {
         return res
             .redirect(urljoin(this.baseUrl, '/oauth/authorize', `?${params.toString()}`));
     }
+
+    async checkCredentials(token) {
+        const resp = await fetch(urljoin(this.baseUrl, '/api/v1/accounts/verify_credentials', {
+            headers: { 'Authorization': token }
+        }));
+        return await resp.json();
+    }
 }
 
 module.exports = PleromaAuthenticator;
