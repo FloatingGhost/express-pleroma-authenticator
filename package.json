@@ -1,6 +1,6 @@
 {
   "name": "express-pleroma-authenticator",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Pluggable oauth2",
   "main": "index.js",
   "repository": "https://git.ihatebeinga.live/floatingghost/express-pleroma-authenticator",

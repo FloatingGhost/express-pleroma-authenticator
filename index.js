@@ -11,6 +11,8 @@ class PleromaAuthenticator {
     }
 
     async _createApplication() {
+        if (this.application) return this.application;
+
         const params = new URLSearchParams();
         params.set('client_name', this.clientName);
         params.set('redirect_uris', this.redirectUris);
@@ -21,9 +23,9 @@ class PleromaAuthenticator {
             body: params
         });
         const application = await resp.json();
+        this.application = application;
         return application;
     }
-
 
 
     async login(req, res) {
@@ -35,6 +37,23 @@ class PleromaAuthenticator {
         params.set('response_type', 'code');
         return res
             .redirect(urljoin(this.baseUrl, '/oauth/authorize', `?${params.toString()}`));
+    }
+
+    async oauthCallback(code) {
+        const application = await this._createApplication();
+        const params = new URLSearchParams();
+        params.set('grant_type', 'authorization_code');
+        params.set('code', code);
+        params.set('redirect_uri', this.redirectUris);
+        params.set('client_id', application.client_id);
+        params.set('client_secret', application.client_secret);
+        console.log(params);
+        const resp = await fetch(urljoin(this.baseUrl, '/oauth/token'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: params
+        });
+        return await resp.json();
     }
 
     async checkCredentials(token) {
