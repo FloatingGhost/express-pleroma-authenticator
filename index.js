@@ -28,13 +28,14 @@ class PleromaAuthenticator {
     }
 
 
-    async login(req, res) {
+    async login(req, res, state='') {
         const application = await this._createApplication();
         const params = new URLSearchParams();
         params.set('client_id', application.client_id);
         params.set('scope', this.scopes);
         params.set('redirect_uri', this.redirectUris);
         params.set('response_type', 'code');
+        params.set('state', state);
         return res
             .redirect(urljoin(this.baseUrl, '/oauth/authorize', `?${params.toString()}`));
     }
@@ -53,14 +54,22 @@ class PleromaAuthenticator {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: params
         });
-        return await resp.json();
+        const json = await resp.json();
+        if (json.error) {
+            throw new Error(json.error);
+        }
+        return json;
     }
 
     async checkCredentials(token) {
         const resp = await fetch(urljoin(this.baseUrl, '/api/v1/accounts/verify_credentials'), {
             headers: { 'Authorization': token }
         });
-        return await resp.json();
+        const json = await resp.json();
+        if (json.error) {
+            throw new Error(json.error);
+        }
+        return json;
     }
 }
 
